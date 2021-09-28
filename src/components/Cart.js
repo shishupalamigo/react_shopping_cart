@@ -1,27 +1,32 @@
 import React from 'react';
 import CartItem from './CartItem';
+import { connect } from 'react-redux';
 
-class Cart extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-    };
+function Cart (props) {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     isOpen: false,
+  //   };
+  // }
+  // close = () => {
+  //   this.setState({ isOpen: false });
+  // };
+  // open = () => {
+  //   this.setState({ isOpen: true });
+  // };
+  function handleCart() {
+    props.dispatch({type: "isOpen"})
   }
-  close = () => {
-    this.setState({ isOpen: false });
-  };
-  open = () => {
-    this.setState({ isOpen: true });
-  };
-  render() {
-    const { isOpen } = this.state;
+  
+  // console.log(props, "From cart" );
+    const  isOpen  = props.isOpen;
     if (!isOpen) {
-      return <ClosedCart open={this.open} />;
+      return <ClosedCart handleCart={handleCart}/>;
     }
     return (
       <aside className='cart'>
-        <div onClick={this.close} className='close-btn'>
+        <div onClick={() => handleCart()} className='close-btn'>
           X
         </div>
         <div className='cart-body'>
@@ -59,12 +64,12 @@ class Cart extends React.Component {
       </aside>
     );
   }
-}
+
 
 function ClosedCart(props) {
   return (
     <div className='close-cart'>
-      <span onClick={props.open} className='open-btn'>
+      <span onClick={() => props.handleCart()} className='open-btn'>
         <div className='cart-icon'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -86,5 +91,10 @@ function ClosedCart(props) {
     </div>
   );
 }
+function mapStateToProps(state) {
+  return {
+    isOpen : state.isOpen,
+  }
+}
 
-export default Cart;
+export default connect(mapStateToProps)(Cart);
